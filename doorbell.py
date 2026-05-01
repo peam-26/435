@@ -31,7 +31,7 @@ def mask_image(img):
 
     # final selected points for porch
     # pts = np.array([[553, 707], [700, 650], [843, 550], [833, 124], [1100, 109], [1100, 619], [906, 700]], dtype=np.int32) # mitchell's array
-    pts = np.array([[385, 16], [854, 20], [904, 655], [434, 673]], dtype=np.int32) # my array
+    pts = np.array([[300, 0], [950, 0], [1000, 700], [350, 700]], dtype=np.int32) # my array
     cv2.fillConvexPoly(mask, pts, 255)
 
     # pts = np.array([[553, 707], [300, 600], [400, 590], [550, 650]], dtype=np.int32) # walkway coordinates
@@ -104,7 +104,7 @@ try:
         print("detector_total = ", detector_total)
         print(" ")
 
-        if detector_total > 30000:
+        if detector_total > 60000:
 
             print("Smart Doorbell has detected someone/something at the door!")
 
@@ -113,7 +113,7 @@ try:
 
             encoder = H264Encoder()
             picam2.start_recording(encoder, FileOutput(f"{timestr}.h264"))
-            time.sleep(5)
+            time.sleep(7)
             picam2.stop_recording()
 
             print("Finished recording...converting to mp4...")
@@ -143,7 +143,7 @@ try:
             fromAdd = smtpUser
 
             f_time = datetime.now().strftime('%a %d %b @ %H:%M')
-            subject = 'Smart Doorbell recording from: ' + f_time
+            subject = 'Smart Doorbell Images Detected: ' + f_time
 
             msg = MIMEMultipart()
             msg['Subject'] = subject
@@ -153,7 +153,7 @@ try:
             msg.preamble = 'Image @ ' + f_time
 
             #body = email.mime.Text.MIMEText('Smart Doorbell video: ' + f_time)
-            body = MIMEText('Smart Doorbell video: ' + f_time)
+            body = MIMEText('Motion Detected! - ' + f_time)
             msg.attach(body)
 
             fp = open('test1.jpg', 'rb')
@@ -189,10 +189,10 @@ try:
             s.sendmail(fromAdd, toAdd, msg.as_string())
             s.quit()
 
-            print("Email delivered!")
+            print("Email Sent")
 
         else:
-            print("Nothing detected...yet!")
+            print("No Detections")
 except KeyboardInterrupt:
     print("Stopped")
 
