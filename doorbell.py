@@ -139,7 +139,7 @@ try:
             smtpUser = 'peam.affiliate@gmail.com'
             smtpPass = 'xirr uwbq bqzy skte'
 
-            toAdd = 'peampats@umd.edu'
+            toAdd = 'peampats@gmail.com'
             fromAdd = smtpUser
 
             f_time = datetime.now().strftime('%a %d %b @ %H:%M')
