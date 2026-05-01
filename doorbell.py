@@ -15,7 +15,7 @@ from picamera2 import Picamera2
 from picamera2.encoders import H264Encoder
 from picamera2.outputs import FileOutput
 from libcamera import Transform
-
+"""
 def select_points(img): # for initial mask point selection
     points = []
     for i in range(0, 4): # number of points needed to form shape
@@ -25,7 +25,7 @@ def select_points(img): # for initial mask point selection
     print(points)
 
     return points
-
+"""
 def mask_image(img):
     mask = np.zeros((img.shape[0], img.shape[1]), dtype="uint8")
 
