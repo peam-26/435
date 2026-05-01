@@ -31,7 +31,7 @@ def mask_image(img):
 
     # final selected points for porch
     # pts = np.array([[553, 707], [700, 650], [843, 550], [833, 124], [1100, 109], [1100, 619], [906, 700]], dtype=np.int32) # mitchell's array
-    pts = np.array([[300, 0], [950, 0], [1000, 700], [350, 700]], dtype=np.int32) # my array
+    pts = np.array([[50, 50], [750, 50], [750, 700], [50, 700]], dtype=np.int32)
     cv2.fillConvexPoly(mask, pts, 255)
 
     # pts = np.array([[553, 707], [300, 600], [400, 590], [550, 650]], dtype=np.int32) # walkway coordinates
@@ -104,7 +104,7 @@ try:
         print("detector_total = ", detector_total)
         print(" ")
 
-        if detector_total > 60000:
+        if detector_total > 45000:
 
             print("Smart Doorbell has detected someone/something at the door!")
 
