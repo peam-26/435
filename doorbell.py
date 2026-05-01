@@ -78,7 +78,7 @@ def mask_image(img):
 
     # Blur the grayscale image to reduce noise and small lighting changes
     # The 11 by 11 kernel smooths the image but still keeps large motion visible
-    gray = cv2.GaussianBlur(gray, (11, 11), 0) # play with kernel size
+    gray = cv2.GaussianBlur(gray, (9, 9), 0) # play with kernel size
 
     # Return both images:
     # masked = useful for showing the region of interest
