@@ -11,6 +11,11 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 
+from picamera2 import Picamera2
+from picamera2.encoders import H264Encoder
+from picamera2.outputs import FileOutput
+from libcamera import Transform
+
 def select_points(img): # for initial mask point selection
     points = []
     for i in range(0, 4): # number of points needed to form shape
@@ -49,6 +54,15 @@ counter = 0
 # img = cv2.imread("calibration.jpg")
 # select_points(img)
 
+picam2 = Picamera2()
+camera_config = picam2.create_video_configuration(
+    main={"size": (1280, 720)},
+    transform=Transform(hflip=1, vflip=1)
+)
+picam2.configure(camera_config)
+picam2.start()
+time.sleep(1)
+
 try:
     while True:
         if cv2.waitKey(1) == ord('q'):
@@ -60,9 +74,9 @@ try:
         print(" ")
 
         # take a 1st and 2nd image to compare
-        os.system('libcamera-still --width 1280 --height 720 --vflip --hflip --timeout 1000 -o test1.jpg')
+        picam2.capture_file("test1.jpg")
         time.sleep(2)
-        os.system('libcamera-still --width 1280 --height 720 --vflip --hflip --timeout 1000 -o test2.jpg')
+        picam2.capture_file("test2.jpg")
         
         print("Captured 1st & 2nd image for analysis...")
 
@@ -97,8 +111,10 @@ try:
             # define a unique name for the new video file
             timestr = time.strftime("doorbell-%Y%m%d-%H%M%S")
 
-            command_video = f'libcamera-vid --width 1280 --height 720 --vflip --hflip -t 5000 -o {timestr}.h264'
-            os.system(command_video)
+            encoder = H264Encoder()
+            picam2.start_recording(encoder, FileOutput(f"{timestr}.h264"))
+            time.sleep(5)
+            picam2.stop_recording()
 
             print("Finished recording...converting to mp4...")
             
@@ -179,3 +195,5 @@ try:
             print("Nothing detected...yet!")
 except KeyboardInterrupt:
     print("Stopped")
+
+picam2.stop()
